@@ -1,0 +1,69 @@
+" 设置使用vim配置,而不是vi
+if &compatible
+  set nocompatible
+end
+
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Vundel管理Vundel
+Bundle 'gmarik/vundle'
+
+
+"" 使用Github仓库管理bundles, vim插件
+" 左边.目录树
+Bundle "scrooloose/nerdtree"
+
+" 右边结构,查看代码中的类,变量,方法 
+Bundle "majutsushi/tagbar"
+
+" 不知道是否修复tagbar,感觉没用
+" Bundle "vim-scripts/ctags.vim"
+
+" molokai颜色主题
+" Bundle "tomasr/molokai"
+" Bundle "flazz/vim-colorschemes"
+Bundle "jnurmine/Zenburn"
+
+" 底部状态栏
+Bundle "Lokaltog/vim-powerline"
+" 底部状态先git相关 
+Bundle "tpope/vim-fugitive"
+
+" 自动创建目录mkdir
+Bundle "pbrisbin/vim-mkdir"
+" 在vim内重命名,用法 :rename[!] {newname}
+Bundle "danro/rename.vim"
+
+" 代码补全
+Bundle "Valloric/YouCompleteMe"
+
+" 代码语法检查
+Bundle "vim-syntastic/syntastic"
+
+" 多行注释
+Bundle "scrooloose/nerdcommenter"
+
+" 自动补全( { 等
+" Bundle "jiangmiao/auto-pairs"
+
+" 快速查找
+Bundle "kien/ctrlp.vim"
+
+" python相关  
+Bundle "klen/python-mode"
+
+" python-pep8风格代码缩进
+" let g:pymode_indent = 0, python-mode默认有提供,单独使用此需配置
+Bundle "Vimjas/vim-python-pep8-indent"
+
+" 缩进指示线
+Bundle "Yggdroot/indentLine"
+
+" vim-autopep8自动格式工具, 一键PEP8,无法使用
+" Bundle "tell-k/vim-autopep8"
+
+
+
+
