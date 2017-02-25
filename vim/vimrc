@@ -235,32 +235,33 @@ let g:pymode_rope_goto_definition_bind = '<leader>go' " 默认<C-c>g
 
 
 " YouCompleteMe配置
-"nnoremap <leader>g :YcmCompleter GoToReferences<CR>
-"nnoremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
-"" 默认配置文件路径
+" 寻找word在代码中相关的地方, 再选择跳转
+nnoremap <leader>gf :YcmCompleter GoToReferences<CR>
+" 寻找并跳转word定义或声明的地方
+nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" 默认配置文件路径
 "let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-"" 打开vim时不再询问是否加载ycm_extra_conf.py配置"
-"let g:ycm_confirm_extra_conf=0
-" set completeopt=longest,menu
+" 打开vim时不再询问是否加载ycm_extra_conf.py配置
+let g:ycm_confirm_extra_conf=0
+" 在接受补全后不分裂出一个窗口显示接受的项 
+set completeopt-=previcw
 " python解释器路径
-"let g:ycm_path_to_python_interpreter='/usr/bin/python'
-"" 是否开启语义补全
-"let g:ycm_seed_identifiers_with_syntax=1
-"" 是否在注释中也开启补全
-" let g:ycm_complete_in_comments=1
-" let g:ycm_collect_identifiers_from_comments_and_strings = 0
-"" 开始补全的字符数
-"let g:ycm_min_num_of_chars_for_completion=2
-"" 补全后自动关机预览窗口
-"let g:ycm_autoclose_preview_window_after_completion=1
-"" 禁止缓存匹配项,每次都重新生成匹配项
-"let g:ycm_cache_omnifunc=0
-"" 字符串中也开启补全
-"let g:ycm_complete_in_strings = 1
-"" 离开插入模式后自动关闭预览窗口
-"autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-"" 回车即选中当前项
-"inoremap <expr> <CR>       pumvisible() ? '<C-y>' : '\<CR>'   
+let g:ycm_path_to_python_interpreter='/usr/bin/python'
+" 是否开启语义补全
+let g:ycm_seed_identifiers_with_syntax=1
+" 是否在注释中也开启补全
+let g:ycm_complete_in_comments=1
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
+" 开始补全的字符数2
+let g:ycm_min_num_of_chars_for_completion=2
+" 补全后自动关机预览窗口
+let g:ycm_autoclose_preview_window_after_completion=1
+" 禁止缓存匹配项,每次都重新生成匹配项
+let g:ycm_cache_omnifunc=0
+" 字符串中也开启补全
+let g:ycm_complete_in_strings = 1
+" 离开插入模式后自动关闭预览窗口
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " Local config
 if filereadable($HOME . "/.vimrc.local")
