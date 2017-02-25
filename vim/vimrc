@@ -1,0 +1,272 @@
+" Use Vim settings, rather then Vi settings. This setting must be as early as
+" possible, as it has side effects.
+" 使用vim设置, 而不是vi
+set nocompatible
+
+" Highlight current line
+" 设置高亮当前行和列
+au WinLeave * set nocursorline nocursorcolumn
+au WinEnter * set cursorline cursorcolumn
+set cursorline cursorcolumn
+
+" Leader,设置映射leader
+let mapleader = ","
+" 表示不需要备份文件
+set nobackup
+" 同时打开,不生成swap文件
+set noswapfile
+" 表示编辑的时候不需要备份文件
+set nowritebackup
+" 表示不创建撤销文件
+set noundofile
+
+" Backspace deletes like most programs in insert mode
+set backspace=2
+" vim输入: 执行命令记录历史条数
+set history=50
+" 在最右下面显示 cursor 的位置
+set ruler
+" 在右下角显示输入的命令
+set showcmd
+" 边输入搜索边高亮
+set incsearch
+" 总显示状态行,比如[+],打开的文件名
+set laststatus=2
+" Git Hotness / bundle: tpope/vim-fugitive
+set statusline+=%{fugitive#statusline()} 
+" 自动保存,切换其他文件时
+set autowrite
+" 退出时需要确认是否保存
+set confirm
+set fileencodings=utf-8,gb18030,gbk,big5
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+" 语法颜色显示
+if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
+  syntax on
+endif
+
+" 读入 ~/.vimrc.bundles配置
+if filereadable(expand("~/.vimrc.bundles"))
+  source ~/.vimrc.bundles
+endif
+
+" 根据文件类型调整indent缩进改为对应, plugin也加载该类型相关的插件
+" python开启后缩进默认为tab,不开不会自动为tab
+filetype plugin indent on
+
+augroup vimrcEx
+  " 删除自动命令组vimrcEx的自动命令
+  autocmd!
+
+  " vim编辑文件,光标总是回到上次的位置 
+  " Don't do it for commit messages, when the position is invalid, or when
+  " inside an event handler (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+      \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
+
+  " 不知道有什么用
+  " Cucumber navigation commands
+  autocmd User Rails Rnavcommand step features/step_definitions -glob=**/* -suffix=_steps.rb
+  autocmd User Rails Rnavcommand config config -glob=**/* -suffix=.rb -default=routes
+
+  " 特殊文件类型设置语法高亮
+  " autocmd BufRead,BufNewFile Appraisals set filetype=ruby " ruby文件
+  autocmd BufRead,BufNewFile *.md set filetype=markdown
+  
+  " markdown拼写检查
+  autocmd FileType markdown setlocal spell
+
+  " Automatically wrap at 80 characters for Markdown
+  autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+
+augroup END
+
+
+" 设置默认1个tab,跳2个space
+set tabstop=2
+" 实际1个tab,代表space空格数量.设置了softtabstop时,tabstop无效.两者相等或只设置一个即可
+" 但是设置后,删除键backspace,会自动删除tab,而不是一个个删除空格
+" set softtabstop=2
+
+" 命令 >>和<<代表缩进.shifitwidth代表命令缩进space长度
+" shiftwidth=2代表 >>或<<缩进2个空格
+set shiftwidth=2
+" 执行>>或<<,会自动对齐到tab,而不一定直接缩进shiftwidth长度
+set shiftround
+
+" 将tab自动转为空格space, 否则删除backsapce会直接删除一个tab
+set expandtab
+" 换行自动缩进
+set autoindent
+
+" 明显设置出每行79个字符的位置线
+set textwidth=79
+set colorcolumn=+1
+
+" 设置显示行号,并且行号宽度为4位
+" set number
+" set numberwidth=4
+" 设置显示和取消number快捷: -nu和+nu
+nmap +nu :set nu<cr>
+nmap -nu :set nonu<cr>
+
+" 使用:split和:splitv分割窗口,新分割分别在下和在右
+set splitbelow
+set splitright
+
+" 默认高亮所有搜索结果
+set hlsearch
+" 设置高亮和取消高亮快捷: -hl和+hl
+nmap +hl :set hlsearch<cr>
+nmap -hl :nohlsearch<cr>
+
+" 映射 ,x ,w ,q 对应执行:x :w :q
+nnoremap <leader>x :x<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+
+" 颜色主题
+" colors zenburn
+" colorscheme codeschool
+" colorscheme molokai
+" highlight NonText guibg=#060606
+" highlight Folded  guibg=#0A0A0A guifg=#9090D0
+" let g:molokai_original = 1
+
+" Nerd Tree 左边<F5>
+let NERDChristmasTree=0
+let NERDTreeWinSize=25
+let NERDTreeChDirMode=2
+let NERDTreeIgnore=['\~$', '\.pyc$', '\.swp$']
+let NERDTreeShowBookmarks=1
+let NERDTreeWinPos="left"
+" 自动启动NERDTree如果没有文件指定
+autocmd vimenter * if !argc() | NERDTree | endif 
+" 关闭vim, 如果窗口只剩下NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif 
+"F5按钮 开启NERDTree
+nmap <F5> :NERDTreeToggle<cr>
+
+" Tagbar 右边<F6>
+let g:tagbar_width=35
+let g:tagbra_autofocus=1
+" set g:tagbar_ctags_bin
+nmap <F6> :TagbarToggle<CR>
+
+" 单独使用vim-python-pep8-indent保持代码缩进, 而不是使用python-mode的
+let g:pymode_indent = 0
+
+" indentLine插件缩进指示线
+" let g:indentLine_char='┆' "指示线格式
+let g:indentLine_enabled = 1
+
+" autopep8设置,无法使用
+" let g:autopep8_disable_show_diff=1
+" autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
+
+" v模式下,<F3> 多行注释 nercommenter插件map <4> <leader>ci <CR>
+map <F3> <leader>ci <CR>
+
+" syatastic插件语法检查
+set statusline+=%#warninmsg# "状态栏加入信息
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_python_checkers=['pylint'] "python语法检查器使用pylint
+" 忽略没有文档字符串警告
+let g:syntastic_python_pylint_args="--disable=C0111" "传递参数给pylint
+let g:syntastic_always_populate_loc_list=1 "运行checker时location list总是更新
+let g:syntastic_auto_loc_list=1 "自动在最下显示错误相关信息
+let g:syntastic_check_on_open=1 "开启文档就检查语法
+let g:syntastic_check_on_wq=0 "关闭保存文件时检查语法
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+
+" ctrlp
+" 输入<F4>打开ctrlP显示快速文件搜索
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.png,*.jpg,*.jpeg,*.gif
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+nmap <F4> :CtrlPMixed<CR>  
+"使用ag命令代替ctrlp默认使用的grep搜索
+" The Silver Searcher https://github.com/ggreer/the_silver_searcher
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files.
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " Ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+
+" pymode插件
+" 报错窗口
+let g:pymode_quickfix_minheight=2
+let g:pymode_quickfix_maxheight=5
+let g:pymode_folding=1 "函数/类/方法折叠, 默认值1
+
+"搜索当前word的文档. 默认为K
+let g:pymode_doc_bind='s' 
+" S搜索文档快捷, 再输入搜索内容
+nmap <leader>S :PymodeDoc  
+
+let g:pymode_run_bind='<leader>r' "默认运行当前python
+" F2 为运行python
+map <F2> <leader>r <CR>  
+let g:pymode_breakpoint_bind='<leader>b' "默认设置断点
+" F3 为python断点
+" map <F3> <leader>b <CR>
+
+" F7 为检查python代码pylint
+nmap <F7> :PymodeLint <CR>
+" 设置检查方式为pylint
+let g:pymode_lint_checkers = ['pylint'] "默认为['pyflakes', 'pep8', 'mccabe']
+" 忽略某些报错/警告
+let g:pymode_lint_ignore = "C0111" "文档字符串警告
+
+" F8 为自动修复PEP8编码
+nmap <F8> :PymodeLintAuto <CR>
+
+" 设置go,寻找定义处. 例如在一个类名处go,会自动跳到类定义处
+let g:pymode_rope_goto_definition_bind = '<leader>go' " 默认<C-c>g
+" let g:pymode_rope_goto_definition_cmd = 'new' "找到定义处,开启新窗口查看的命令
+
+
+" YouCompleteMe配置
+"nnoremap <leader>g :YcmCompleter GoToReferences<CR>
+"nnoremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"" 默认配置文件路径
+"let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+"" 打开vim时不再询问是否加载ycm_extra_conf.py配置"
+"let g:ycm_confirm_extra_conf=0
+" set completeopt=longest,menu
+" python解释器路径
+"let g:ycm_path_to_python_interpreter='/usr/bin/python'
+"" 是否开启语义补全
+"let g:ycm_seed_identifiers_with_syntax=1
+"" 是否在注释中也开启补全
+" let g:ycm_complete_in_comments=1
+" let g:ycm_collect_identifiers_from_comments_and_strings = 0
+"" 开始补全的字符数
+"let g:ycm_min_num_of_chars_for_completion=2
+"" 补全后自动关机预览窗口
+"let g:ycm_autoclose_preview_window_after_completion=1
+"" 禁止缓存匹配项,每次都重新生成匹配项
+"let g:ycm_cache_omnifunc=0
+"" 字符串中也开启补全
+"let g:ycm_complete_in_strings = 1
+"" 离开插入模式后自动关闭预览窗口
+"autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+"" 回车即选中当前项
+"inoremap <expr> <CR>       pumvisible() ? '<C-y>' : '\<CR>'   
+
+" Local config
+if filereadable($HOME . "/.vimrc.local")
+  source ~/.vimrc.local
+endif
+
+
+
+
