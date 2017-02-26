@@ -233,6 +233,8 @@ nmap <F8> :PymodeLintAuto <CR>
 let g:pymode_rope_goto_definition_bind = '<leader>go' " 默认<C-c>g
 " let g:pymode_rope_goto_definition_cmd = 'new' "找到定义处,开启新窗口查看的命令
 
+" 用于关闭语法检查的quickfix
+nmap <F9> :only <CR>
 
 " YouCompleteMe配置
 " 寻找word在代码中相关的地方, 再选择跳转

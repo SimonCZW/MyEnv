@@ -42,6 +42,7 @@
 <F6> F6按键, 打开右边 类/方法/函数显示 Tagbar
 <F7> F7按键, pylint检查python代码(忽略C0111警告,缺少文档字符串)
 <F8> F8按键, 尝试自动修复python代码,保持PEP8编码规范
+<F9> F9按键, 关闭synastix或python-mode的语法检查quickfix窗口
 ```
 
 pymode插件自带命令:
